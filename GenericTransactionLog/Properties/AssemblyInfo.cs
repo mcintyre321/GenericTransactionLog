@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("GenericTransactionLog")]
-[assembly: AssemblyDescription("A reusable transaction log for building DBs and stuff")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GenericTransactionLog")]
+
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyDescription("A reusable transaction log for building DBs and stuff")]
+[assembly: AssemblyProduct("GenericTransactionLog")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
