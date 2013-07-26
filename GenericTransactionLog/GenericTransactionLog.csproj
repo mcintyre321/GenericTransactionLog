@@ -43,6 +43,7 @@
     <Compile Include="Currying\Funcs.cs" />
     <Compile Include="FileTransactionStore.cs" />
     <Compile Include="GenericTransaction.cs" />
+    <Compile Include="InMemoryTransactionStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionLog.cs" />
     <Compile Include="TransactionStore.cs" />

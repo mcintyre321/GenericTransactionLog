@@ -4,7 +4,8 @@ using System.IO;
 
 namespace GenericTransactionLog
 {
-    public class TransactionLog<TContext> where TContext:class 
+    public class TransactionLog<TContext>  : IDisposable
+        where TContext : class
     {
         private readonly Func<TContext> _initialiseContext;
         private readonly Action<GenericTransaction<TContext>, Stream> _writeTransaction;
@@ -62,10 +63,10 @@ namespace GenericTransactionLog
 
         private void DoLog(GenericTransaction<TContext> transaction)
         {
-            using (var fileStream = _store.OpenAppend())
+            using (var stream = _store.OpenAppend())
             {
-                _writeTransaction(transaction, fileStream);
-                fileStream.Flush();
+                _writeTransaction(transaction, stream);
+                stream.Flush();
             }
         }
 
@@ -77,6 +78,11 @@ namespace GenericTransactionLog
                 DoLog(transaction);
                 transaction.Apply(Value);
             }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

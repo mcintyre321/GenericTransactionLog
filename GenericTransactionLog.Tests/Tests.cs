@@ -8,10 +8,9 @@ namespace GenericTransactionLog.Tests
 {
     public class Tests
     {
-        [Test, Ignore]
+        [Test]
         public void CanWorkWithAnInMemoryLog()
         {
-            var fileName = Path.GetRandomFileName();
             var fileTransactionStore = new InMemoryTransactionStore();
 
             var transactionLog = GetTransactionLog(fileTransactionStore);
@@ -22,6 +21,9 @@ namespace GenericTransactionLog.Tests
             var counter = transactionLog.Value;
 
             Assert.AreEqual(1, counter.Value);
+            transactionLog.LogAndApplyTransaction(transaction);
+             
+            Assert.AreEqual(2, counter.Value);
         }
 
         [Test]
@@ -38,6 +40,10 @@ namespace GenericTransactionLog.Tests
             var counter = transactionLog.Value;
 
             Assert.AreEqual(1, counter.Value);
+
+            transactionLog.LogAndApplyTransaction(transaction);
+
+            Assert.AreEqual(2, counter.Value);
         }
 
         [Test]

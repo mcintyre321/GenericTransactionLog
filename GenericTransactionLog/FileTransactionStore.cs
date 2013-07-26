@@ -15,11 +15,12 @@ namespace GenericTransactionLog
         public override Stream OpenRead()
         {
             return File.OpenRead(fileName);
-        }
+        } 
 
         public override Stream OpenAppend()
         {
             return File.Open(fileName, FileMode.Append);
         }
+         
     }
 }
