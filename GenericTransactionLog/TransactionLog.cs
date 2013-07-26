@@ -4,7 +4,7 @@ using System.IO;
 
 namespace GenericTransactionLog
 {
-    public class TransactionLog<TContext> 
+    public class TransactionLog<TContext> where TContext:class 
     {
         private readonly Func<TContext> _initialiseContext;
         private readonly Action<GenericTransaction<TContext>, Stream> _writeTransaction;
@@ -21,9 +21,25 @@ namespace GenericTransactionLog
             _writeTransaction = writeTransaction;
             _readTransactions = readTransactions;
             _store = store;
+
         }
 
-        public TContext Rebuild()
+
+        private readonly object _lock = new object();
+        private TContext _value = null;
+
+        public TContext Value
+        {
+            get
+            {
+                lock(_lock)
+                {
+                    return _value ?? (_value = Rebuild());
+                }
+            }
+        }
+
+        private TContext Rebuild()
         {
             var model = _initialiseContext();
             using (var stream = _store.OpenRead())
@@ -38,11 +54,28 @@ namespace GenericTransactionLog
 
         public void LogTransaction(GenericTransaction<TContext> transaction)
         {
-            
+            lock (_lock)
+            {
+                DoLog(transaction);
+            }
+        }
+
+        private void DoLog(GenericTransaction<TContext> transaction)
+        {
             using (var fileStream = _store.OpenAppend())
             {
                 _writeTransaction(transaction, fileStream);
                 fileStream.Flush();
+            }
+        }
+
+        public void LogAndApplyTransaction(GenericTransaction<TContext> transaction)
+        {
+            lock (_lock)
+            {
+                var value = Value; //ensure rebuild
+                DoLog(transaction);
+                transaction.Apply(Value);
             }
         }
     }
